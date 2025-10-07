@@ -33,17 +33,15 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const mvX = useMotionValue(0);
   const mvY = useMotionValue(0);
 
-  // Convert normalized 0..1 to px
-  const left = parentRect ? task.x * parentRect.width : 0;
-  const top = parentRect ? task.y * parentRect.height : 0;
-
+  // Convert normalized 0..1 to px and sync only when task position or parent rect changes
   useEffect(() => {
-    // Only sync external changes when not dragging
-    if (!isDragging) {
+    if (!isDragging && parentRect) {
+      const left = task.x * parentRect.width;
+      const top = task.y * parentRect.height;
       mvX.set(left);
       mvY.set(top);
     }
-  }, [task.x, task.y, parentRect, isDragging, left, top, mvX, mvY]);
+  }, [task.x, task.y, parentRect, isDragging, mvX, mvY]);
 
   // Completion style
   const done = Boolean(task.doneAt);
