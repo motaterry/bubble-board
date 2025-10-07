@@ -17,7 +17,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const parentRef = useRef<HTMLDivElement | null>(null);
   const [parentRect, setParentRect] = useState<DOMRect | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
+  const isDraggingRef = useRef(false);
 
   useEffect(() => {
     parentRef.current = nodeRef.current?.parentElement as HTMLDivElement | null;
@@ -35,13 +35,13 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
 
   // Convert normalized 0..1 to px and sync only when task position or parent rect changes
   useEffect(() => {
-    if (!isDragging && parentRect) {
+    if (!isDraggingRef.current && parentRect) {
       const left = task.x * parentRect.width;
       const top = task.y * parentRect.height;
       mvX.set(left);
       mvY.set(top);
     }
-  }, [task.x, task.y, parentRect, isDragging, mvX, mvY]);
+  }, [task.x, task.y, parentRect, mvX, mvY]);
 
   // Completion style
   const done = Boolean(task.doneAt);
@@ -66,7 +66,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
         boxShadow: "0 20px 40px rgba(0,0,0,0.4)"
       }}
       onDragStart={() => {
-        setIsDragging(true);
+        isDraggingRef.current = true;
         haptics.light();
         // Add subtle glow effect while dragging
         if (nodeRef.current) {
@@ -109,7 +109,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
         
         // Add a small delay before allowing clicks again to prevent accidental clicks
         setTimeout(() => {
-          setIsDragging(false);
+          isDraggingRef.current = false;
         }, 100);
       }}
       initial={{ opacity: 0, scale: 0, rotate: -180 }}
@@ -124,7 +124,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
       <motion.button
         onClick={(e) => {
           // Prevent click events during drag
-          if (isDragging) {
+          if (isDraggingRef.current) {
             e.preventDefault();
             e.stopPropagation();
             return;
