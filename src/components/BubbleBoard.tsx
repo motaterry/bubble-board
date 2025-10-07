@@ -4,12 +4,17 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task, loadTasks, saveTasks, exportTasks } from '@/lib/storage';
 import { getTodayCompletes } from '@/lib/metrics';
+import { loadGameStats, saveGameStats, updateStatsOnCompletion, GameStats } from '@/lib/gamification';
+import { haptics } from '@/lib/haptics';
 import AddTask from './AddTask';
 import Toolbar from './Toolbar';
 import Bubble from './Bubble';
 import OnboardingHints from './OnboardingHints';
 import HelpModal from './HelpModal';
 import KeyboardShortcuts from './KeyboardShortcuts';
+import GameStatsDisplay from './GameStats';
+import AchievementToast from './AchievementToast';
+import Confetti from './Confetti';
 
 export default function BubbleBoard() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -18,6 +23,10 @@ export default function BubbleBoard() {
   const [hasCompleted, setHasCompleted] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [focusedTaskId, setFocusedTaskId] = useState<string | null>(null);
+  const [gameStats, setGameStats] = useState<GameStats>(loadGameStats());
+  const [newAchievement, setNewAchievement] = useState<string | null>(null);
+  const [confettiTrigger, setConfettiTrigger] = useState(0);
+  const [confettiPosition, setConfettiPosition] = useState({ x: 0, y: 0 });
   const boardRef = useRef<HTMLDivElement | null>(null);
 
   // Load tasks on mount
@@ -55,6 +64,7 @@ export default function BubbleBoard() {
 
   const handleTaskClick = (id: string, e: React.MouseEvent) => {
     if (e.altKey) {
+      haptics.medium();
       removeTask(id);
     } else {
       const task = tasks.find(t => t.id === id);
@@ -62,7 +72,33 @@ export default function BubbleBoard() {
         const wasCompleted = Boolean(task.doneAt);
         updateTask(id, { doneAt: wasCompleted ? null : Date.now() });
         if (!wasCompleted) {
+          // Task completed! Trigger celebration
+          haptics.success();
           setHasCompleted(true);
+          
+          // Update game stats
+          const oldAchievements = gameStats.achievements;
+          const newStats = updateStatsOnCompletion(gameStats);
+          setGameStats(newStats);
+          saveGameStats(newStats);
+          
+          // Check for new achievements
+          const newAchievements = newStats.achievements.filter(a => !oldAchievements.includes(a));
+          if (newAchievements.length > 0) {
+            haptics.celebration();
+            setNewAchievement(newAchievements[0]);
+            setTimeout(() => setNewAchievement(null), 5000);
+          }
+          
+          // Trigger confetti at bubble position
+          const bubbleElement = e.currentTarget.getBoundingClientRect();
+          setConfettiPosition({
+            x: bubbleElement.left + bubbleElement.width / 2,
+            y: bubbleElement.top + bubbleElement.height / 2,
+          });
+          setConfettiTrigger(prev => prev + 1);
+        } else {
+          haptics.light();
         }
       }
     }
@@ -151,6 +187,7 @@ export default function BubbleBoard() {
             </motion.h1>
           </div>
           <div className="flex flex-wrap lg:flex-nowrap items-center gap-3">
+            <GameStatsDisplay stats={gameStats} />
             <AddTask onAddTask={addTask} />
             <Toolbar 
               tasks={tasks} 
@@ -171,6 +208,19 @@ export default function BubbleBoard() {
             </motion.button>
           </div>
         </motion.div>
+
+        {/* Achievement Toast */}
+        <AchievementToast 
+          achievementId={newAchievement} 
+          onClose={() => setNewAchievement(null)} 
+        />
+
+        {/* Confetti */}
+        <Confetti 
+          x={confettiPosition.x} 
+          y={confettiPosition.y} 
+          trigger={confettiTrigger} 
+        />
 
         {/* Error Toast */}
         <AnimatePresence>

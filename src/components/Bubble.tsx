@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import { Task } from '@/lib/storage';
 import { getQuadrantLabel } from '@/lib/metrics';
+import { haptics } from '@/lib/haptics';
 
 interface BubbleProps {
   task: Task;
@@ -67,6 +68,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
       }}
       onDragStart={() => {
         setIsDragging(true);
+        haptics.light();
         // Add subtle glow effect while dragging
         if (nodeRef.current) {
           nodeRef.current.style.filter = 'drop-shadow(0 0 20px rgba(59, 130, 246, 0.5))';
@@ -75,6 +77,8 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
       }}
       onDragEnd={(_, info) => {
         if (!parentRect) return;
+        
+        haptics.medium();
         
         // Get the current position from the motion values
         const currentX = mvX.get();
@@ -109,10 +113,14 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
           setIsDragging(false);
         }, 100);
       }}
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      initial={{ opacity: 0, scale: 0, rotate: -180 }}
+      animate={{ opacity: 1, scale: 1, rotate: 0 }}
+      exit={{ opacity: 0, scale: 0, rotate: 180 }}
+      transition={{ 
+        type: "spring",
+        stiffness: 260,
+        damping: 20
+      }}
     >
       <motion.button
         onClick={(e) => {
@@ -130,12 +138,12 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
             ? "bg-gradient-to-br from-emerald-400 to-emerald-600 border-emerald-200 text-emerald-900 shadow-emerald-500/25"
             : "bg-gradient-to-br from-sky-400 to-sky-600 border-sky-200 text-slate-900 shadow-sky-500/25"
         } shadow-xl backdrop-blur-sm flex items-center justify-center text-center font-semibold focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-200`}
-        whileTap={{ scale: 0.95 }}
+        whileTap={{ scale: 0.9 }}
         whileHover={{ 
-          scale: 1.05,
+          scale: 1.08,
           boxShadow: done 
-            ? "0 10px 30px rgba(16, 185, 129, 0.3)" 
-            : "0 10px 30px rgba(59, 130, 246, 0.3)"
+            ? "0 10px 40px rgba(16, 185, 129, 0.5)" 
+            : "0 10px 40px rgba(59, 130, 246, 0.5)"
         }}
         animate={done ? { 
           scale: [1, 1.1, 1],

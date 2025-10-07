@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Task } from '@/lib/storage';
+import { haptics } from '@/lib/haptics';
 
 interface AddTaskProps {
   onAddTask: (task: Omit<Task, 'id'>) => void;
@@ -18,6 +19,7 @@ export default function AddTask({ onAddTask }: AddTaskProps) {
     if (!title.trim() || isSubmitting) return;
 
     setIsSubmitting(true);
+    haptics.medium();
     
     // Add a small delay for better UX feedback
     await new Promise(resolve => setTimeout(resolve, 150));
