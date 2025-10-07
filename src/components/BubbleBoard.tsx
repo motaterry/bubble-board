@@ -36,11 +36,11 @@ export default function BubbleBoard() {
     }
   }, [tasks]);
 
-  // Find an empty spot for a new bubble
-  const findEmptySpot = (preferredX: number, preferredY: number): { x: number; y: number } => {
-    const minDistance = 0.15; // Minimum distance between bubble centers (normalized)
+  // Find an empty spot for a new bubble, prioritizing Plan quadrant
+  const findEmptySpot = (): { x: number; y: number } => {
+    const minDistance = 0.12; // Minimum distance between bubble centers (allow tighter packing)
     
-    // Check if preferred spot is available
+    // Check if spot is available
     const isSpotAvailable = (x: number, y: number) => {
       return !tasks.some(task => {
         const dx = task.x - x;
@@ -50,20 +50,38 @@ export default function BubbleBoard() {
       });
     };
 
-    // If preferred spot is available, use it
-    if (isSpotAvailable(preferredX, preferredY)) {
-      return { x: preferredX, y: preferredY };
-    }
+    // Define quadrant search areas with priorities
+    // Plan quadrant (bottom-right): important but not urgent - best for new tasks
+    const quadrants = [
+      { name: 'Plan', xRange: [0.55, 0.9], yRange: [0.55, 0.9] },      // Bottom-right
+      { name: 'Do Now', xRange: [0.55, 0.9], yRange: [0.1, 0.45] },    // Top-right
+      { name: 'Delegate', xRange: [0.1, 0.45], yRange: [0.1, 0.45] },  // Top-left
+      { name: 'Eliminate', xRange: [0.1, 0.45], yRange: [0.55, 0.9] }, // Bottom-left
+    ];
 
-    // Try spiral pattern around preferred spot
-    const angles = [0, 45, 90, 135, 180, 225, 270, 315];
-    const distances = [0.2, 0.3, 0.4];
-    
-    for (const dist of distances) {
-      for (const angle of angles) {
-        const rad = (angle * Math.PI) / 180;
-        const x = Math.max(0.1, Math.min(0.9, preferredX + dist * Math.cos(rad)));
-        const y = Math.max(0.1, Math.min(0.9, preferredY + dist * Math.sin(rad)));
+    // Try each quadrant in priority order
+    for (const quadrant of quadrants) {
+      const [xMin, xMax] = quadrant.xRange;
+      const yMin = quadrant.yRange[0];
+      const yMax = quadrant.yRange[1];
+      
+      // Try grid pattern within quadrant
+      const steps = 5;
+      for (let i = 0; i < steps; i++) {
+        for (let j = 0; j < steps; j++) {
+          const x = xMin + (xMax - xMin) * (i / (steps - 1));
+          const y = yMin + (yMax - yMin) * (j / (steps - 1));
+          
+          if (isSpotAvailable(x, y)) {
+            return { x, y };
+          }
+        }
+      }
+      
+      // Try random positions within quadrant
+      for (let attempt = 0; attempt < 10; attempt++) {
+        const x = xMin + Math.random() * (xMax - xMin);
+        const y = yMin + Math.random() * (yMax - yMin);
         
         if (isSpotAvailable(x, y)) {
           return { x, y };
@@ -71,15 +89,15 @@ export default function BubbleBoard() {
       }
     }
 
-    // Fallback: random position
+    // Ultimate fallback: random position anywhere
     return {
-      x: 0.3 + Math.random() * 0.4,
-      y: 0.3 + Math.random() * 0.4,
+      x: 0.2 + Math.random() * 0.6,
+      y: 0.2 + Math.random() * 0.6,
     };
   };
 
   const addTask = (taskData: Omit<Task, 'id'>) => {
-    const emptySpot = findEmptySpot(taskData.x, taskData.y);
+    const emptySpot = findEmptySpot();
     const newTask: Task = {
       ...taskData,
       x: emptySpot.x,

@@ -27,7 +27,8 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
     return () => window.removeEventListener("resize", recalc);
   }, []);
 
-  const size = task.impact === 3 ? 96 : task.impact === 2 ? 72 : 56;
+  const baseSize = task.impact === 3 ? 96 : task.impact === 2 ? 72 : 56;
+  const size = baseSize;
 
   // Motion values - initialize once
   const mvX = useMotionValue(0);
@@ -139,10 +140,11 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
         } shadow-xl backdrop-blur-sm flex items-center justify-center text-center font-semibold focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-200`}
         whileTap={{ scale: 0.9 }}
         whileHover={{ 
-          scale: 1.08,
+          scale: 1.15,
+          zIndex: 100,
           boxShadow: done 
-            ? "0 10px 40px rgba(16, 185, 129, 0.5)" 
-            : "0 10px 40px rgba(59, 130, 246, 0.5)"
+            ? "0 15px 50px rgba(16, 185, 129, 0.6)" 
+            : "0 15px 50px rgba(59, 130, 246, 0.6)"
         }}
         animate={done ? { 
           scale: [1, 1.1, 1],
