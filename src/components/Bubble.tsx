@@ -31,33 +31,9 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const baseSize = task.impact === 3 ? 96 : task.impact === 2 ? 72 : 56;
   const size = baseSize;
 
-  // Motion values - initialize once
-  const mvX = useMotionValue(0);
-  const mvY = useMotionValue(0);
-
-  // Convert normalized 0..1 to px and sync only when THIS bubble's position actually changes
-  useEffect(() => {
-    // Only update if this specific bubble's position changed (not just any task update)
-    const positionChanged = lastPositionRef.current.x !== task.x || lastPositionRef.current.y !== task.y;
-    
-    if (!isDraggingRef.current && parentRect && positionChanged) {
-      const left = task.x * parentRect.width;
-      const top = task.y * parentRect.height;
-      mvX.set(left);
-      mvY.set(top);
-      lastPositionRef.current = { x: task.x, y: task.y };
-    }
-  }, [task.x, task.y, parentRect, mvX, mvY]);
-  
-  // Initialize position on mount or when parentRect first becomes available
-  useEffect(() => {
-    if (parentRect && mvX.get() === 0 && mvY.get() === 0) {
-      const left = task.x * parentRect.width;
-      const top = task.y * parentRect.height;
-      mvX.set(left);
-      mvY.set(top);
-    }
-  }, [parentRect, task.x, task.y, mvX, mvY]);
+  // Calculate position in pixels
+  const left = parentRect ? task.x * parentRect.width : 0;
+  const top = parentRect ? task.y * parentRect.height : 0;
 
   // Completion style
   const done = Boolean(task.doneAt);
@@ -69,12 +45,13 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
     <motion.div
       ref={nodeRef}
       className="absolute select-none"
-      style={{ x: mvX, y: mvY, width: size, height: size }}
+      style={{ left, top, width: size, height: size }}
       data-testid="bubble"
       drag
       dragMomentum={false}
       dragElastic={0}
       dragConstraints={parentRef}
+      dragTransition={{ power: 0, timeConstant: 0 }}
       whileDrag={{ 
         scale: 1.1,
         rotate: 1,
@@ -91,30 +68,30 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
         }
       }}
       onDragEnd={(_, info) => {
-        if (!parentRect) return;
+        if (!parentRect || !nodeRef.current) return;
         
         haptics.medium();
         
-        // Get the current position from the motion values
-        const currentX = mvX.get();
-        const currentY = mvY.get();
+        // Get the bubble's current position relative to parent
+        const bubbleRect = nodeRef.current.getBoundingClientRect();
+        const parentRectCurrent = parentRef.current?.getBoundingClientRect();
         
-        // Calculate the final position based on the drag offset
-        const finalX = currentX;
-        const finalY = currentY;
+        if (!parentRectCurrent) return;
+        
+        // Calculate position relative to parent
+        const relativeX = bubbleRect.left - parentRectCurrent.left;
+        const relativeY = bubbleRect.top - parentRectCurrent.top;
         
         // Ensure the bubble stays within bounds
-        const clampedX = Math.max(0, Math.min(parentRect.width - size, finalX));
-        const clampedY = Math.max(0, Math.min(parentRect.height - size, finalY));
+        const clampedX = Math.max(0, Math.min(parentRect.width - size, relativeX));
+        const clampedY = Math.max(0, Math.min(parentRect.height - size, relativeY));
         
         // Convert to normalized coordinates (0-1)
         const nx = clamp01(clampedX / parentRect.width);
         const ny = clamp01(clampedY / parentRect.height);
         
-        // Update the motion values to the final position
-        mvX.set(clampedX);
-        mvY.set(clampedY);
-        
+        // Update position
+        lastPositionRef.current = { x: nx, y: ny };
         onMove(nx, ny);
         
         // Remove glow effect and dragging class
