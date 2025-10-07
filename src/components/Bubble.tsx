@@ -27,15 +27,15 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
     return () => window.removeEventListener("resize", recalc);
   }, []);
 
-  // Convert normalized 0..1 to px
-  const left = parentRect ? task.x * (parentRect.width - 0) : 0;
-  const top = parentRect ? task.y * (parentRect.height - 0) : 0;
-
   const size = task.impact === 3 ? 96 : task.impact === 2 ? 72 : 56;
 
-  // Motion values
-  const mvX = useMotionValue(left);
-  const mvY = useMotionValue(top);
+  // Motion values - initialize once
+  const mvX = useMotionValue(0);
+  const mvY = useMotionValue(0);
+
+  // Convert normalized 0..1 to px
+  const left = parentRect ? task.x * parentRect.width : 0;
+  const top = parentRect ? task.y * parentRect.height : 0;
 
   useEffect(() => {
     // Only sync external changes when not dragging
@@ -43,8 +43,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
       mvX.set(left);
       mvY.set(top);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [left, top, isDragging]);
+  }, [task.x, task.y, parentRect, isDragging, left, top, mvX, mvY]);
 
   // Completion style
   const done = Boolean(task.doneAt);
