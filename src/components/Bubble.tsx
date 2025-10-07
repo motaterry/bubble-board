@@ -38,11 +38,13 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const mvY = useMotionValue(top);
 
   useEffect(() => {
-    // sync external changes
-    mvX.set(left);
-    mvY.set(top);
+    // Only sync external changes when not dragging
+    if (!isDragging) {
+      mvX.set(left);
+      mvY.set(top);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [left, top]);
+  }, [left, top, isDragging]);
 
   // Completion style
   const done = Boolean(task.doneAt);
