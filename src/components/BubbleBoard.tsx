@@ -36,9 +36,54 @@ export default function BubbleBoard() {
     }
   }, [tasks]);
 
+  // Find an empty spot for a new bubble
+  const findEmptySpot = (preferredX: number, preferredY: number): { x: number; y: number } => {
+    const minDistance = 0.15; // Minimum distance between bubble centers (normalized)
+    
+    // Check if preferred spot is available
+    const isSpotAvailable = (x: number, y: number) => {
+      return !tasks.some(task => {
+        const dx = task.x - x;
+        const dy = task.y - y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        return distance < minDistance;
+      });
+    };
+
+    // If preferred spot is available, use it
+    if (isSpotAvailable(preferredX, preferredY)) {
+      return { x: preferredX, y: preferredY };
+    }
+
+    // Try spiral pattern around preferred spot
+    const angles = [0, 45, 90, 135, 180, 225, 270, 315];
+    const distances = [0.2, 0.3, 0.4];
+    
+    for (const dist of distances) {
+      for (const angle of angles) {
+        const rad = (angle * Math.PI) / 180;
+        const x = Math.max(0.1, Math.min(0.9, preferredX + dist * Math.cos(rad)));
+        const y = Math.max(0.1, Math.min(0.9, preferredY + dist * Math.sin(rad)));
+        
+        if (isSpotAvailable(x, y)) {
+          return { x, y };
+        }
+      }
+    }
+
+    // Fallback: random position
+    return {
+      x: 0.3 + Math.random() * 0.4,
+      y: 0.3 + Math.random() * 0.4,
+    };
+  };
+
   const addTask = (taskData: Omit<Task, 'id'>) => {
+    const emptySpot = findEmptySpot(taskData.x, taskData.y);
     const newTask: Task = {
       ...taskData,
+      x: emptySpot.x,
+      y: emptySpot.y,
       id: Math.random().toString(36).slice(2, 9),
     };
     setTasks(prev => [newTask, ...prev]);
