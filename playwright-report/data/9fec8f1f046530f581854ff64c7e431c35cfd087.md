@@ -1,0 +1,62 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - heading "Eisenhower Bubble Board" [level=1] [ref=e6]
+        - paragraph [ref=e7]: Drag bubbles into quadrants to prioritize. Click to complete. Alt+Click to delete.
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - generic [ref=e10]:
+            - textbox "Add a task…" [active] [ref=e11]: Small task
+            - generic [ref=e12]: 10/200
+          - generic [ref=e13]:
+            - combobox "Impact (size)" [ref=e14] [cursor=pointer]:
+              - option "S" [selected]
+              - option "M"
+              - option "L"
+            - generic:
+              - img
+            - generic: Small Impact
+          - button "Add Task" [ref=e15]:
+            - generic [ref=e16]: Add Task
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]:
+              - generic [ref=e21]: "Today's completes:"
+              - generic [ref=e22]: "0"
+            - generic [ref=e24]:
+              - generic [ref=e25]: "0"
+              - generic [ref=e26]: /0
+              - generic [ref=e27]: completed
+          - generic [ref=e28]:
+            - button "Export" [disabled] [ref=e29]:
+              - generic [ref=e30]:
+                - img [ref=e31]
+                - text: Export
+            - button "Import" [ref=e33]:
+              - generic [ref=e34]:
+                - img [ref=e35]
+                - text: Import
+        - button "Help & Shortcuts" [ref=e37]:
+          - img [ref=e38]
+    - generic [ref=e40]:
+      - generic [ref=e41]: Urgent ↑
+      - generic [ref=e42]: Important →
+      - generic [ref=e43]: Do Now
+      - generic [ref=e44]: Plan
+      - generic [ref=e45]: Delegate
+      - generic [ref=e46]: Eliminate
+      - generic [ref=e47]:
+        - img [ref=e49]
+        - paragraph [ref=e51]: Add your first task
+        - paragraph [ref=e52]: Start organizing your priorities
+    - generic [ref=e55]:
+      - generic [ref=e56]: Add a task
+      - button "Dismiss hint" [ref=e57]: ×
+  - button "Open Next.js Dev Tools" [ref=e63] [cursor=pointer]:
+    - img [ref=e64] [cursor=pointer]
+  - alert [ref=e67]
+```

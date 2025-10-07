@@ -24,3 +24,22 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Ensure proper layering for drag operations */
+.drag-container {
+  position: relative;
+  z-index: 1;
+}
+
+.dragging {
+  z-index: 100 !important;
+  position: relative;
+}
+
+/* Prevent text selection during drag */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

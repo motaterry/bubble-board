@@ -1,0 +1,60 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - heading "Eisenhower Bubble Board" [level=1] [ref=e6]
+        - paragraph [ref=e7]: Drag bubbles into quadrants to prioritize. Click to complete. Alt+Click to delete.
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - textbox "Add a task…" [ref=e11]
+          - generic [ref=e12]:
+            - combobox "Impact (size)" [ref=e13] [cursor=pointer]:
+              - option "S"
+              - option "M" [selected]
+              - option "L"
+            - generic:
+              - img
+            - generic: Medium Impact
+          - button "Add Task" [disabled] [ref=e14]:
+            - generic [ref=e15]: Add Task
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - generic [ref=e18]:
+              - generic [ref=e20]: "Today's completes:"
+              - generic [ref=e21]: "0"
+            - generic [ref=e23]:
+              - generic [ref=e24]: "0"
+              - generic [ref=e25]: /0
+              - generic [ref=e26]: completed
+          - generic [ref=e27]:
+            - button "Export" [disabled] [ref=e28]:
+              - generic [ref=e29]:
+                - img [ref=e30]
+                - text: Export
+            - button "Import" [ref=e32]:
+              - generic [ref=e33]:
+                - img [ref=e34]
+                - text: Import
+        - button "Help & Shortcuts" [ref=e36]:
+          - img [ref=e37]
+    - generic [ref=e39]:
+      - generic [ref=e40]: Urgent ↑
+      - generic [ref=e41]: Important →
+      - generic [ref=e42]: Do Now
+      - generic [ref=e43]: Plan
+      - generic [ref=e44]: Delegate
+      - generic [ref=e45]: Eliminate
+      - generic [ref=e46]:
+        - img [ref=e48]
+        - paragraph [ref=e50]: Add your first task
+        - paragraph [ref=e51]: Start organizing your priorities
+    - generic [ref=e54]:
+      - generic [ref=e55]: Add a task
+      - button "Dismiss hint" [ref=e56]: ×
+  - button "Open Next.js Dev Tools" [ref=e62] [cursor=pointer]:
+    - img [ref=e63] [cursor=pointer]
+  - alert [ref=e67]
+```

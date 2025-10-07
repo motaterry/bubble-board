@@ -1,0 +1,117 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]:
+        - heading "Eisenhower Bubble Board" [level=1] [ref=e6]
+        - paragraph [ref=e7]: Drag bubbles into quadrants to prioritize. Click to complete. Alt+Click to delete.
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - textbox "Add a task…" [ref=e11]
+          - generic [ref=e12]:
+            - combobox "Impact (size)" [ref=e13] [cursor=pointer]:
+              - option "S"
+              - option "M" [selected]
+              - option "L"
+            - generic:
+              - img
+            - generic: Medium Impact
+          - button "Add Task" [disabled] [ref=e14]:
+            - generic [ref=e15]: Add Task
+        - generic [ref=e16]:
+          - generic [ref=e17]:
+            - generic [ref=e18]:
+              - generic [ref=e20]: "Today's completes:"
+              - generic [ref=e21]: "0"
+            - generic [ref=e23]:
+              - generic [ref=e24]: "0"
+              - generic [ref=e25]: /0
+              - generic [ref=e26]: completed
+          - generic [ref=e27]:
+            - button "Export" [disabled] [ref=e28]:
+              - generic [ref=e29]:
+                - img [ref=e30]
+                - text: Export
+            - button "Import" [ref=e32]:
+              - generic [ref=e33]:
+                - img [ref=e34]
+                - text: Import
+        - button "Help & Shortcuts" [active] [ref=e36]:
+          - img [ref=e37]
+    - generic [ref=e39]:
+      - generic [ref=e40]: Urgent ↑
+      - generic [ref=e41]: Important →
+      - generic [ref=e42]: Do Now
+      - generic [ref=e43]: Plan
+      - generic [ref=e44]: Delegate
+      - generic [ref=e45]: Eliminate
+      - generic [ref=e46]:
+        - img [ref=e48]
+        - paragraph [ref=e50]: Add your first task
+        - paragraph [ref=e51]: Start organizing your priorities
+    - generic [ref=e54]:
+      - generic [ref=e55]: Add a task
+      - button "Dismiss hint" [ref=e56]: ×
+    - generic [ref=e59]:
+      - generic [ref=e60]:
+        - heading "Help & Shortcuts" [level=2] [ref=e61]
+        - button "Close help modal" [ref=e62]:
+          - img [ref=e63]
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - heading "Keyboard Shortcuts" [level=3] [ref=e67]
+          - generic [ref=e68]:
+            - generic [ref=e69]:
+              - generic [ref=e70]: Add new task
+              - generic [ref=e71]: Ctrl/Cmd + Enter
+            - generic [ref=e72]:
+              - generic [ref=e73]: Export tasks
+              - generic [ref=e74]: Ctrl/Cmd + E
+            - generic [ref=e75]:
+              - generic [ref=e76]: Import tasks
+              - generic [ref=e77]: Ctrl/Cmd + I
+            - generic [ref=e78]:
+              - generic [ref=e79]: Toggle task completion (when focused)
+              - generic [ref=e80]: Space/Enter
+            - generic [ref=e81]:
+              - generic [ref=e82]: Delete task (when focused)
+              - generic [ref=e83]: Alt + Space/Enter
+            - generic [ref=e84]:
+              - generic [ref=e85]: Navigate between tasks
+              - generic [ref=e86]: Tab
+        - generic [ref=e87]:
+          - heading "Interactions" [level=3] [ref=e88]
+          - generic [ref=e89]:
+            - generic [ref=e90]:
+              - generic [ref=e91]: Move task to different quadrant
+              - generic [ref=e92]: Drag bubble
+            - generic [ref=e93]:
+              - generic [ref=e94]: Toggle completion status
+              - generic [ref=e95]: Click bubble
+            - generic [ref=e96]:
+              - generic [ref=e97]: Delete task
+              - generic [ref=e98]: Alt + Click bubble
+            - generic [ref=e99]:
+              - generic [ref=e100]: See impact description
+              - generic [ref=e101]: Hover impact selector
+        - generic [ref=e102]:
+          - heading "Quadrant Guide" [level=3] [ref=e103]
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: Do Now
+              - generic [ref=e107]: Urgent & Important
+            - generic [ref=e108]:
+              - generic [ref=e109]: Plan
+              - generic [ref=e110]: Important, Not Urgent
+            - generic [ref=e111]:
+              - generic [ref=e112]: Delegate
+              - generic [ref=e113]: Urgent, Not Important
+            - generic [ref=e114]:
+              - generic [ref=e115]: Eliminate
+              - generic [ref=e116]: Not Urgent, Not Important
+  - button "Open Next.js Dev Tools" [ref=e122] [cursor=pointer]:
+    - img [ref=e123] [cursor=pointer]
+  - alert [ref=e126]
+```

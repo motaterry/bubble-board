@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eisenhower Bubble Board
+
+A beautiful, interactive task management app based on the Eisenhower Matrix. Organize your tasks by urgency and importance using an intuitive drag-and-drop interface.
+
+## Features
+
+### 🎯 Core Functionality
+- **2x2 Quadrant Board**: Organize tasks by urgency (Y-axis) and importance (X-axis)
+- **Drag & Drop**: Move tasks between quadrants to reprioritize
+- **Task Completion**: Click bubbles to mark as complete
+- **Impact Sizing**: Choose Small (S), Medium (M), or Large (L) impact for visual priority
+- **Local Storage**: All data persists automatically in your browser
+
+### 🎨 Enhanced UX
+- **Smooth Animations**: Powered by Framer Motion for delightful interactions
+- **Visual Feedback**: Glowing effects, scale animations, and completion celebrations
+- **Responsive Design**: Works beautifully on desktop and mobile
+- **Dark Theme**: Easy on the eyes with a modern dark palette
+- **Gradient Backgrounds**: Subtle quadrant color coding for better visual organization
+
+### ⌨️ Keyboard Shortcuts
+- `Ctrl/Cmd + Enter`: Add new task
+- `Ctrl/Cmd + E`: Export tasks
+- `Ctrl/Cmd + I`: Import tasks
+- `Space/Enter`: Toggle task completion (when focused)
+- `Alt + Space/Enter`: Delete task (when focused)
+- `Tab`: Navigate between tasks
+
+### 📊 Smart Features
+- **Today's Completions**: Track your daily progress
+- **Import/Export**: Backup and restore your tasks
+- **Onboarding Hints**: Guided experience for new users
+- **Error Handling**: Graceful error messages and validation
+- **Accessibility**: Full keyboard navigation and ARIA labels
+
+### 🎯 Quadrant Guide
+- **Do Now** (Urgent + Important): Critical tasks requiring immediate attention
+- **Plan** (Important + Not Urgent): Strategic tasks to schedule
+- **Delegate** (Urgent + Not Important): Tasks to assign to others
+- **Eliminate** (Not Urgent + Not Important): Tasks to remove from your list
 
 ## Getting Started
 
-First, run the development server:
+1. **Add Tasks**: Type in the input field and press Enter or click "Add Task"
+2. **Set Impact**: Choose S/M/L to control bubble size
+3. **Organize**: Drag bubbles to the appropriate quadrant
+4. **Complete**: Click bubbles to mark as done
+5. **Delete**: Alt+Click bubbles to remove them
+
+## Technical Stack
+
+- **Next.js 15** with TypeScript
+- **Tailwind CSS** for styling
+- **Framer Motion** for animations
+- **Zod** for data validation
+- **Local Storage** for persistence
+
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Data Format
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Tasks are stored as JSON with the following structure:
 
-## Learn More
+```typescript
+{
+  id: string;
+  title: string;
+  x: number; // 0-1 importance (0=low, 1=high)
+  y: number; // 0-1 urgency (0=high, 1=low)
+  impact: 1 | 2 | 3; // S/M/L
+  doneAt?: number | null; // timestamp when completed
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Browser Support
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Chrome/Edge 88+
+- Firefox 85+
+- Safari 14+
+- Mobile browsers with touch support
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built with ❤️ for productivity enthusiasts who believe in the power of visual task management.
