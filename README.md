@@ -4,7 +4,7 @@ A beautiful, interactive task management app based on the Eisenhower Matrix. Org
 
 ## 🌐 Live Demo
 
-**[Try it now →](https://bubble-board-jwzyursct-terrymota0-gmailcoms-projects.vercel.app)**
+**[Try it now →](https://bubble-board-k1x3xh1uu-terrymota0-gmailcoms-projects.vercel.app)**
 
 ## Features
 
