@@ -2,6 +2,10 @@
 
 A beautiful, interactive task management app based on the Eisenhower Matrix. Organize your tasks by urgency and importance using an intuitive drag-and-drop interface.
 
+## 🌐 Live Demo
+
+**[Try it now →](https://bubble-board-jwzyursct-terrymota0-gmailcoms-projects.vercel.app)**
+
 ## Features
 
 ### 🎯 Core Functionality
