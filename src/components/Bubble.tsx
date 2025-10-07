@@ -18,6 +18,7 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const parentRef = useRef<HTMLDivElement | null>(null);
   const [parentRect, setParentRect] = useState<DOMRect | null>(null);
   const isDraggingRef = useRef(false);
+  const lastPositionRef = useRef({ x: task.x, y: task.y });
 
   useEffect(() => {
     parentRef.current = nodeRef.current?.parentElement as HTMLDivElement | null;
@@ -34,15 +35,29 @@ export default function Bubble({ task, onMove, onClick, onKeyDown }: BubbleProps
   const mvX = useMotionValue(0);
   const mvY = useMotionValue(0);
 
-  // Convert normalized 0..1 to px and sync only when task position or parent rect changes
+  // Convert normalized 0..1 to px and sync only when THIS bubble's position actually changes
   useEffect(() => {
-    if (!isDraggingRef.current && parentRect) {
+    // Only update if this specific bubble's position changed (not just any task update)
+    const positionChanged = lastPositionRef.current.x !== task.x || lastPositionRef.current.y !== task.y;
+    
+    if (!isDraggingRef.current && parentRect && positionChanged) {
+      const left = task.x * parentRect.width;
+      const top = task.y * parentRect.height;
+      mvX.set(left);
+      mvY.set(top);
+      lastPositionRef.current = { x: task.x, y: task.y };
+    }
+  }, [task.x, task.y, parentRect, mvX, mvY]);
+  
+  // Initialize position on mount or when parentRect first becomes available
+  useEffect(() => {
+    if (parentRect && mvX.get() === 0 && mvY.get() === 0) {
       const left = task.x * parentRect.width;
       const top = task.y * parentRect.height;
       mvX.set(left);
       mvY.set(top);
     }
-  }, [task.x, task.y, parentRect, mvX, mvY]);
+  }, [parentRect, task.x, task.y, mvX, mvY]);
 
   // Completion style
   const done = Boolean(task.doneAt);
